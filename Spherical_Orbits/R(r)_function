@@ -1,0 +1,67 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import BlackHolePO as bh 
+import numpy as np 
+import matplotlib.pyplot as plt
+
+
+
+
+
+#Espaço-tempo 
+M = 1 
+a = 0.5 
+Q = 0
+
+#Condições Iniciais
+m = 1
+q = 0
+
+Lz = 0
+Qcarter = 100.0
+
+
+
+
+
+def delta(r): return r**2 + a**2 + Q**2 - 2*M*r
+
+#Black Hole: A student text, third edition
+r0 = 0
+
+def E(r): 
+    E = np.sqrt(r*delta(r)*delta(r)/((r**2 + a**2)*(r**3 - 3*M*r*r + a*a*r + a*a*M)))
+    return E
+
+
+def R_eff(r):
+    return r**3 - 3*M*r*r + a*a*r + a*a*M
+
+
+
+Np = 1000 # Numero de pontos a serem plotados
+
+N = 3
+intervalo = 1/N
+fig = plt.figure()
+ax = fig.add_subplot(111)
+raio = M + np.sqrt(M**2 - a**2 - (Q)**2)
+print("r_bh",raio)
+names = []
+
+# Generate x-values
+x_values = np.linspace(0, 10, 100)
+
+# Calculate y-values
+y_values = R_eff(x_values)
+    
+plt.figure(figsize=(8, 6))
+plt.plot(x_values, y_values, label="Polinomio determinante")
+plt.title("Polinômio determinante")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.grid(True)
+plt.legend(names, loc='upper right')
+plt.title("Polinômio determinante")
+plt.show()
+ 
