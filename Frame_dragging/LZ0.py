@@ -42,7 +42,7 @@ sp.append(p3)
 sp.generate_space_time()
 
 sp.plot_Graph([0,1,2])
-sp.plot_WLines(title = "Caso de estudo 2: Captura de partículas ",names = ["Partícula 1: Lz = 0","Particula 2: Lz = -4","Particula 3: Lz = 4"], M =M , a=a, Q =Q , inside =1)
+sp.plot_WLines(title = "Caso de estudo 1: Captura de partículas ",names = ["Partícula 1: Lz = 0","Particula 2: Lz = -4","Particula 3: Lz = 4"], M =M , a=a, Q =Q , inside =1)
 
 ln = sp.returnWline(0)
 angular = (ln.xt[-2][3] - ln.xt[-3][3])/(ln.xt[-2][0] - ln.xt[-3][0])

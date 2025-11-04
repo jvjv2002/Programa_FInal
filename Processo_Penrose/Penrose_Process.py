@@ -53,5 +53,5 @@ sp.append(p2)
 sp.generate_space_time()
 index = [0,1,2]
 sp.plot_Graph(index)
-sp.plot_WLines(title = "Processo de Penrose ",names = ["Partícula 0: E="+f'{E0:.2f}'+"; Lz ="+f'{Lz0:.2f}', "Fóton 1: E="+f'{E1:.2f}'+"; Lz ="+f'{Lz1:.2f}', "Fóton 2: E="+f'{E2:.2f}'+"; Lz ="+f'{Lz2:.2f}'],M = M, Q = Q, a = a)
+sp.plot_WLines(title = "Caso de Estudo 4:Processo de Penrose ",names = ["Partícula 0: E="+f'{E0:.2f}'+"; Lz ="+f'{Lz0:.2f}', "Fóton 1: E="+f'{E1:.2f}'+"; Lz ="+f'{Lz1:.2f}', "Fóton 2: E="+f'{E2:.2f}'+"; Lz ="+f'{Lz2:.2f}'],M = M, Q = Q, a = a, inside = 3)
 

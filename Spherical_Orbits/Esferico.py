@@ -36,8 +36,8 @@ names = []
 interval = 1/N
 i = 0
 for i in range(N+1):
-    p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,Qcarter = Qcarter)
-    names.append("Trajetória "+str(i)+":"+str(q))
+    p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,N = 500000 ,dt =0.0001,Qcarter = Qcarter)
+    names.append("q:"+f'{q:.2f}')
     sp.append(p1)
     q = q + interval
     #Atualiza energia e momento angular para manter as mesmas condições iniciais mecânica
@@ -47,9 +47,9 @@ for i in range(N+1):
 print("Energia:",E)
 print("Constante de Carter",Qcarter)
 
-# Erros numéricos estão colocando as condições iniciais próximos mas não exatamente 0, portanto para garantir a condição inicial
+#Simular equações 
 
 sp.generate_space_time()
-index = [i for i in range(N)]
+index = [i+1 for i in range(N)]
 sp.plot_Graph(index)
-sp.plot_WLines(title= "Movimento esférico", names= names, M = M, a = a, Q = Q)
+sp.plot_WLines(title= "Movimento esférico", names= names, M = M, a = a, Q = Q, inside= 3)

@@ -47,7 +47,7 @@ intervalo = 1/N
 for i in range(N+1):
     ln1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1],[E,Lz,m,q,M,Q,a],N = 500000 ,Qcarter = 0)
     sp.append(ln1)
-    names.append("q = "+str(q))
+    names.append("q = "+f'{q:.2f}')
     q = q + intervalo
     E = E0 + q*Q*r0/(r0**2)
     Lz = Lz0 + q*Q*a*r0/(r0**2)
@@ -59,4 +59,4 @@ sp.generate_space_time()
 index = [i for i in range(N)]
 sp.plot_Graph(index)
 
-sp.plot_WLines(title = "Órbita circulares",names = names ,M = M , Q = Q , a = a)
+sp.plot_WLines(title = "Caso 2: Órbita circulares perturbada por cargas",names = names ,M = M , Q = Q , a = a, inside = 2)

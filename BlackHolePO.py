@@ -51,7 +51,7 @@ class Linha_de_Mundo: # Linha de mundo de uma partícula teste no espaço-tempo 
         dpr = (1/(2*sigma))*(-((util*util*(-2*M+2*r))/(delta*delta)) + (2*util*(2*r*E - q*Q)/(delta)) - ((-2*M + 2*r)*pr*pr) - (2*m*m*r)    )
         
         #dptheta
-        dptheta =  (1/sigma)*( cosseno*seno*(a*a*(E*E + m*m) + lz*lz/(seno*seno)) + (cosseno**3)*lz*lz/(seno**3) )
+        dptheta =  (1/sigma)*( cosseno*seno*(a*a*(-E*E + m*m) + lz*lz/(seno*seno)) + ((cosseno**3)*lz*lz/(seno**3)) )
         
         dudt = np.array([dt,dr,dtheta,dphi,dpr,dptheta])
         
@@ -87,7 +87,16 @@ class Linha_de_Mundo: # Linha de mundo de uma partícula teste no espaço-tempo 
         # Instruções na discretização da trajetória 
         self.dt = dt 
         self.N = N 
-        
+        # Para testes de Captura de partícula-teste
+        if(dudt == None):
+            M = self.const[4]
+            Q = self.const[5]
+            a = self.const[6]
+            self.r_horizon = M + np.sqrt(M**2 - a**2 - Q**2)
+        else:
+            self.r_horizon = 0.0
+            
+            
         #Utiliza a maneira opcional de dar as condições iniciais por meio da Constante de Carter K 
         if(Qcarter != None):
             # Propriedades da partícula
@@ -133,11 +142,7 @@ class Linha_de_Mundo: # Linha de mundo de uma partícula teste no espaço-tempo 
         else:
             self.dudt = dudt
         
-        # Para testes de Captura de partícula-teste
-        M = self.const[4]
-        Q = self.const[5]
-        a = self.const[6]
-        self.r_horizon = M + np.sqrt(M**2 - a**2 - Q**2)
+        
              
     def evolve_RK(self): # Método de Runge-Kutta 4 para frente no tempo
         self.xt.append(self.x) # Adiciona estado dinâmico à lista da história da partícula 
@@ -203,12 +208,12 @@ class Space_Time: # Essa classe representa o conjunto de linhas de mundo present
         self.__active_Wlines: List[Linha_de_Mundo] = []
         self.__plot_Wlines: List[Linha_de_Mundo] = []
     def append(self,ln:Linha_de_Mundo):
+        """ Adiciona Linha de mundo ao espaço-tempo
+        Entrada: ln Linha_de_Mundo"""
         self.__Wlines.append(ln)
         self.__active_Wlines.append(ln)
         
     def deactivate_ln(self, ln:Linha_de_Mundo ):
-        """ Adiciona Linha de mundo ao espaço-tempo
-        Entrada: ln Linha_de_Mundo"""
         self.__active_Wlines.remove(ln)
     
     def remove_ln(self, ln:Linha_de_Mundo):
@@ -240,7 +245,8 @@ class Space_Time: # Essa classe representa o conjunto de linhas de mundo present
         Entrada:
         title : String -> Título do plot das trajetórias
         names : String[] -> Lista contendo o nome de cada uma das trajetórias
-        inside: Any -> Qualquer valor diferente de None colocará as legendas dentro da imagem 
+        inside: Int -> Qualquer valor diferente de None colocará as legendas dentro da imagem, 
+        1: Para upper_left, 2: upper right, 3: lower_left, 4: lower_right
         M: Float -> Energia do buraco negro  
         a: Float -> Momento angular por massa do buraco negro
         Q: Float -> Carga elétrica do buraco negro
@@ -290,7 +296,14 @@ class Space_Time: # Essa classe representa o conjunto de linhas de mundo present
             if(inside == None):
                 plt.legend(names, loc='upper left', bbox_to_anchor=(1.05, 1))
             else:
-                plt.legend(names, loc='upper left')            
+                if(inside == 1):
+                    plt.legend(names, loc='upper left') 
+                elif(inside == 2):
+                    plt.legend(names,loc = 'upper right')
+                elif(inside == 3):
+                    plt.legend(names,loc = 'lower left')
+                elif(inside == 4):
+                    plt.legend(names,loc = 'lower right')        
         plt.title(title)
         plt.show()
         
@@ -321,13 +334,13 @@ class Space_Time: # Essa classe representa o conjunto de linhas de mundo present
                 phi.append(lm.xt[j][3])
             
             #Plotar gráficos em função de t
-            axs[0].plot(t,r,lw = 0.5, color = colors[k])
+            axs[0].plot(t,r,lw = 0.7, color = colors[k])
         
-            axs[1].plot(t,theta, lw = 0.5, color = colors[k])
+            axs[1].plot(t,theta, lw = 0.7, color = colors[k])
         
-            axs[2].plot(t,phi, lw = 0.5, color = colors[k])
+            axs[2].plot(t,phi, lw = 0.7, color = colors[k])
 
-        plt.tight_layout() # Adjust subplot parameters for a tight layout
+        plt.tight_layout()
         plt.show()
     
     def returnWline(self,i):
