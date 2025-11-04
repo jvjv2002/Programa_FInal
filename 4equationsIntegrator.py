@@ -3,6 +3,11 @@ import numpy as np
 
 # É possível resolver as 4 EDO's que envolve quadrados demonstrado por Carter, desde que se escolha os sinais de $R(r)$ e $\Theta(\theta)$
 
+# Testa se existem diferenças numéricas, o que não foi detectado, portanto se existe algum erro numérico devido aos polos, ele não foi detectado a partir da diferença dos dois algoritimos
+
+#É necessário integrar
+
+# Integra a partir das 4 EDO's de carter que não permite mudança de sinal de r
 def dudt(x,const):
     t,r,theta,phi = x 
     m,q,E,Lz,Qcarter,M,a,Q = const 
@@ -47,13 +52,30 @@ E = E0
 Qcarter = ((E_sph(r0)**2)* (((r0**2+a**2)**2) ) /(delta(r0))) - r0**2 - a*a*E_sph(r0)*E_sph(r0)
 
 # Quantidade de plots
-ln1 = bh.Linha_de_Mundo([0.0,r0,np.pi/2,0],[m,q,E,Lz,Qcarter,M,a,Q],dudt = dudt)
-ln2 = bh.Linha_de_Mundo([0.0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a], Qcarter = Qcarter)
+# Quantidade de plots
+N = 3
 sp = bh.Space_Time()
-sp.append(ln1)
-sp.append(ln2)
-sp.generate_space_time()
+names = []
+interval = 1/N
+i = 0
+for i in range(N+1):
+    p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,Qcarter = Qcarter)
+    ln2 = bh.Linha_de_Mundo([0.0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a], Qcarter = Qcarter)
+    names.append("q:"+f'{q:.2f}')
+    names.append("q2:"+f'{q:.2f}')
+    sp.append(p1)
+    sp.append(ln2)
+    q = q + interval
+    #Atualiza energia e momento angular para manter as mesmas condições iniciais mecânica
+    E = E0 + q*Q*r0/(r0**2)
+    Lz = Lz0 + q*Q*a*r0/(r0**2)
 
-names = ["4eqs","6eqs"]
-sp.plot_Graph([0,1])
+print("Energia:",E)
+print("Constante de Carter",Qcarter)
+
+#Simular equações 
+
+sp.generate_space_time()
+index = [i+1 for i in range(2*N)]
+sp.plot_Graph(index)
 sp.plot_WLines(title= "Movimento esférico", names= names, M = M, a = a, Q = Q, inside= 3)
