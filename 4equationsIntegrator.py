@@ -3,30 +3,29 @@ import numpy as np
 
 # É possível resolver as 4 EDO's que envolve quadrados demonstrado por Carter, desde que se escolha os sinais de $R(r)$ e $\Theta(\theta)$
 
-# Testa se existem diferenças numéricas, o que não foi detectado, portanto se existe algum erro numérico devido aos polos, ele não foi detectado a partir da diferença dos dois algoritimos
-
 #É necessário integrar
 
 # Integra a partir das 4 EDO's de carter que não permite mudança de sinal de r
+
 def dudt(x,const):
     t,r,theta,phi = x 
     m,q,E,Lz,Qcarter,M,a,Q = const 
     P = E*(r**2 + a**2) - a*Lz - q*Q*r 
     delta = r**2 + a**2 + Q**2 - 2*M*r
-    sigma = r**2 - (a**2)*((np.cos(theta))**2) 
-    
-    dr = (1/sigma)*np.sqrt(P**2 - delta*(m*m*r*r + Qcarter + (Lz + a*E)**2 ))
+    sigma = r**2 + (a**2)*((np.cos(theta))**2) 
+    print("ERRO?",(-Qcarter - (Lz-a*E)**2 - m*m*r*r + (P*P/delta) )/delta)
+    print("ERRO:", P**2 - delta*(m*m*r*r + Qcarter + (Lz - a*E)**2 ))
+    dr = (1/sigma)*np.sqrt(P**2 - delta*(m*m*r*r + Qcarter + (Lz - a*E)**2 ))
     dtheta = (1/sigma)*np.sqrt(Qcarter - (np.cos(theta)*np.cos(theta)*(a*a*(m*m-E*E) + ((Lz)*(Lz)/(np.sin(theta)**2)) )) )
-    
+
     dphi = (1/sigma)*(-(a*E - (Lz/((np.sin(theta))**2)) ) + (a*P/delta))
-    dt = (1/sigma)*(-a*(a*E*(np.sin(theta)**2) - Lz ) + (r**2 + a**2)*P/delta)
+    dt = (1/sigma)*(-a*(a*E*np.sin(theta)*np.sin(theta) - Lz)   +  ((r*r + a*a)*(P)/delta)    ) 
     
-    #print("dtheta/dt",dtheta/dt)
-    
+    if(10**3 < (Lz*Lz/((np.sin(theta))**2))):
+        print("Possível Erro")
     dudt = np.array([dt,dr,dtheta,dphi])
     
     return dudt
-
 #Espaço-tempo 
 M = 1 
 a = 0.91651
@@ -58,24 +57,23 @@ sp = bh.Space_Time()
 names = []
 interval = 1/N
 i = 0
-for i in range(N+1):
-    p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,Qcarter = Qcarter)
-    ln2 = bh.Linha_de_Mundo([0.0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a], Qcarter = Qcarter)
-    names.append("q:"+f'{q:.2f}')
-    names.append("q2:"+f'{q:.2f}')
-    sp.append(p1)
-    sp.append(ln2)
-    q = q + interval
-    #Atualiza energia e momento angular para manter as mesmas condições iniciais mecânica
-    E = E0 + q*Q*r0/(r0**2)
-    Lz = Lz0 + q*Q*a*r0/(r0**2)
 
+#p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,Qcarter = Qcarter)
+q = q + interval
+E = E0 + q*Q*r0/(r0**2)
+Lz = Lz0 + q*Q*a*r0/(r0**2)
+ln2 = bh.Linha_de_Mundo([0.0, r0, np.pi/2, 0.0], [m,q,E,Lz,Qcarter,M,a,Q],dudt = dudt )
+p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,Qcarter = Qcarter)
+print(p1.x)
+names.append("q:"+f'{q:.2f}')
+#names.append("q2:"+f'{q:.2f}')
+#sp.append(ln2)
+sp.append(p1)
 print("Energia:",E)
 print("Constante de Carter",Qcarter)
 
 #Simular equações 
-
+#dudt([0.0, r0, np.pi/2, 0.0],[m,q,E,Lz,Qcarter,M,a,Q])
 sp.generate_space_time()
-index = [i+1 for i in range(2*N)]
-sp.plot_Graph(index)
+sp.plot_Graph([0])
 sp.plot_WLines(title= "Movimento esférico", names= names, M = M, a = a, Q = Q, inside= 3)

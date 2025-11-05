@@ -30,13 +30,13 @@ E = E0
 Qcarter = ((E_sph(r0)**2)* (((r0**2+a**2)**2) ) /(delta(r0))) - r0**2 - a*a*E_sph(r0)*E_sph(r0)
 
 # Quantidade de plots
-N = 3
+N = 10
 sp = bh.Space_Time()
 names = []
 interval = 1/N
 i = 0
 for i in range(N+1):
-    p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,N = 500000 ,dt =0.0001,Qcarter = Qcarter)
+    p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,N = 50000 ,dt =0.01,Qcarter = Qcarter)
     names.append("q:"+f'{q:.2f}')
     sp.append(p1)
     q = q + interval
@@ -52,4 +52,4 @@ print("Constante de Carter",Qcarter)
 sp.generate_space_time()
 index = [i+1 for i in range(N)]
 sp.plot_Graph(index)
-sp.plot_WLines(title= "Movimento esférico", names= names, M = M, a = a, Q = Q, inside= 3)
+sp.plot_WLines(title= "Caso 4: Perturbação de movimento esférico", names= names, M = M, a = a, Q = Q, inside= 3)
