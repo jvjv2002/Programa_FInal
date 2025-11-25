@@ -77,7 +77,7 @@ int main(void){
             x0[5] = ptheta;
             ln = reuse_Wline(ln,50000,0.01,x0,m,q,E,Lz,NAN,M,Q,a); 
             double* xf = evolve_RK_inverse(ln);
-            if(xf[1]<r_bh*1.0001){
+            if((xf[1]<r_bh*1.0001) || (isnan(xf[i]))){
                 shadow[Nx*j + i] = 0;
                 //printf("Trajetória caiu no buraco negro %zu %zu \n",j,i);
             }else{
