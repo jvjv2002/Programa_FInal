@@ -9,6 +9,9 @@ import numpy as np
 #sp.append(ln2)
 #sp.generate_space_time() 
 #sp.plot_WLines(title='teste')    
+
+#Para fins de Comparação esse programa foi realizado para verificar se gerava o mesmo resultado que:RODRIGUES, V. F.; BERNARDES, E. d. S. Simulações computacionais de trajetórias na presença de buracos negros em rotação. 2024.     Para órbitas circulares
+
 M = 1.0 
 a = 0.5 
 Q = 0.0 

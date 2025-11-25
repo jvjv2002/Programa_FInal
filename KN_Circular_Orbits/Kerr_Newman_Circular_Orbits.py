@@ -52,6 +52,8 @@ for i in range(N+1):
     E = E0 + q*Q*r0/(r0**2)
     Lz = Lz0 + q*Q*a*r0/(r0**2)
     #Garantir que energia cinéitca+ repouso da partícula se mantêm os mesmos
+    #   Atualiza energia e momento angular para manter as mesmas condições iniciais mecânica
+    #   Isso vale em condições inciais em que \theta = pi/2
     #print("Condição Inicial: ",i,ln1.x). De fato, desconderando o campo eletromagnético Condição Inicial mecãnica se manteve
     
 

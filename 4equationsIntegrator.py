@@ -1,7 +1,7 @@
 import BlackHolePO as bh 
 import numpy as np
 
-# É possível resolver as 4 EDO's que envolve quadrados demonstrado por Carter, desde que se escolha os sinais de $R(r)$ e $\Theta(\theta)$
+# Arquivo para testar possíveis erros numéricos nos polos
 
 #É necessário integrar
 
@@ -63,12 +63,22 @@ q = q + interval
 E = E0 + q*Q*r0/(r0**2)
 Lz = Lz0 + q*Q*a*r0/(r0**2)
 ln2 = bh.Linha_de_Mundo([0.0, r0, np.pi/2, 0.0], [m,q,E,Lz,Qcarter,M,a,Q],dudt = dudt )
+
+#Testa instabilidad numérica na região
 p1 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] ,Qcarter = Qcarter)
-print(p1.x)
-names.append("q:"+f'{q:.2f}')
+p2  = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a] , N = 100000, dt = 0.002,Qcarter = Qcarter)
+p3 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a], N = 500000, dt = 0.001 ,Qcarter = Qcarter)
+p4 = bh.Linha_de_Mundo([0,r0,np.pi/2,0,1,1], [E,Lz,m,q,M,Q,a], N = 1000000, dt = 0.0005 ,Qcarter = Qcarter)
 #names.append("q2:"+f'{q:.2f}')
 #sp.append(ln2)
 sp.append(p1)
+sp.append(p2)
+sp.append(p3)
+sp.append(p4)
+names.append("traj1")
+names.append("traj2")
+names.append("traj3")
+names.append("traj4")
 print("Energia:",E)
 print("Constante de Carter",Qcarter)
 

@@ -1,5 +1,4 @@
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import BlackHolePO as bh 
 import numpy as np
 
@@ -20,9 +19,9 @@ sp = bh.Space_Time()
 names = []
 for i in range(N+1):
 
-    f = bh.Linha_de_Mundo([0,13.0, np.pi/2, 0.0,-1,1],[E,Lz,m,q,M,Q,a],Qcarter=0.0, N = 50000,dt = 0.01) 
+    f = bh.Linha_de_Mundo([0,13.0, np.pi/2, 0.0,-1,1],[E,Lz,m,q,M,Q,a],Qcarter=0.0, N = 500000,dt = 0.001) 
     sp.append(f)
-    names.append("Trajetória :"+str(E))
+    names.append("Trajetória :"+f'{E:.2f}')
     E = E - interval
 sp.generate_space_time()
 sp.plot_WLines(title = "Órbitas não ligadas",names = names , M = M, a = a , Q = Q) 
